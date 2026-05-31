@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Hotel | Бронирование отелей</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <span class="logo-icon">🏣</span> Hotel
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Главная</a>
+                <a href="booking.html" class="nav-link">Бронирования</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Найди идеальный отель</h1>
+            <p>Лучшие цены, комфортные номера, незабываемый отдых. Бронируй в пару кликов!</p>
+            <a href="booking.html" class="btn btn-primary">Забронировать сейчас</a>
+        </div>
+    </section>
+
+    <!-- КАРТОЧКИ ОТЕЛЕЙ -->
+    <section class="hotels-section">
+        <div class="container">
+            <h2 class="section-title">⭐ Популярные отели</h2>
+            <div class="hotel-grid" id="hotelGrid">
+                <!-- карточки через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- БЛОК С ПРЕИМУЩЕСТВАМИ -->
+    <section class="features">
+        <div class="container features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">✅</div>
+                <h3>Мгновенное подтверждение</h3>
+                <p>Бронируй и получай гарантию места сразу</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">💲</div>
+                <h3>Лучшая цена</h3>
+                <p>Гарантируем низкие ставки</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🌐</div>
+                <h3>Поддержка 24/7</h3>
+                <p>Поможем с любым вопросом</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ФУТЕР -->
+    <footer class="footer">
+        <div class="container">
+            <p>2026 Hotel — бронирование отелей.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JS функция отображение карточек отелей на главной
+        const hotels = [
+            { name: "Grand Plaza", price: "от 8 990 ₽/ночь", image: "🏙️", rating: "4.8 ★" },
+            { name: "Sea Breeze Resort", price: "от 12 500 ₽/ночь", image: "🌊", rating: "4.9 ★" },
+            { name: "Mountain View", price: "от 6 450 ₽/ночь", image: "🏞", rating: "4.6 ★" },
+            { name: "City Central", price: "от 5 200 ₽/ночь", image: "🏛", rating: "4.5 ★" }
+        ];
+
+        function renderHotels() {
+            const grid = document.getElementById('hotelGrid');
+            if(!grid) return;
+            grid.innerHTML = hotels.map(hotel => `
+                <div class="hotel-card">
+                    <div class="hotel-image">${hotel.image}</div>
+                    <div class="hotel-info">
+                        <h3>${hotel.name}</h3>
+                        <div class="hotel-rating">${hotel.rating}</div>
+                        <p class="hotel-price">${hotel.price}</p>
+                        <a href="booking.html" class="btn-small">Выбрать</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderHotels();
+    </script>
+</body>
+</html>

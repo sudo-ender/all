@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothes - Магазин одежды</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Clothes<span>Shop</span></div>
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="cart.html">Корзина (<span id="cart-count">0</span>)</a>
+    </nav>
+</header>
+
+<main>
+    <h2 style="text-align: center; margin-bottom: 25px;">Новинки сезона</h2>
+    <div class="catalog" id="catalog">
+        <!-- Товары добавлены через JS --> 
+    </div>
+</main>
+
+<script>
+    // Товары магазина
+    const products = [
+        { id: 1, name: "Футболка Classic", price: 1490, image: "https://placehold.co/250x200/e67e22/white?text=T-Shirt" },
+        { id: 2, name: "Джинсы Premium", price: 3490, image: "https://placehold.co/250x200/3498db/white?text=Jeans" },
+        { id: 3, name: "Куртка Кожаная", price: 5990, image: "https://placehold.co/250x200/2c3e50/white?text=Jacket" },
+        { id: 4, name: "Кроссовки Nike", price: 4990, image: "https://placehold.co/250x200/27ae60/white?text=Shoes" }
+    ];
+
+    // Функция для получения корзины из localStorage
+    function getCart() {
+        const cart = localStorage.getItem("clothesCart");
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    // Сохранить корзину
+    function saveCart(cart) {
+        localStorage.setItem("clothesCart", JSON.stringify(cart));
+        updateCartCount();
+    }
+
+    // Обновить счетчик в шапке
+    function updateCartCount() {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const countSpan = document.getElementById("cart-count");
+        if (countSpan) countSpan.innerText = totalItems;
+    }
+
+    // Добавить товар в корзину
+    function addToCart(productId) {
+        let cart = getCart();
+        const existingItem = cart.find(item => item.id === productId);
+        
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            const product = products.find(p => p.id === productId);
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: 1
+            });
+        }
+        
+        saveCart(cart);        
+    }
+
+    // Отрисовка каталога
+    function renderCatalog() {
+        const catalogDiv = document.getElementById("catalog");
+        if (!catalogDiv) return;
+        
+        catalogDiv.innerHTML = products.map(product => `
+            <div class="product-card">
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <div class="price">${product.price} ₽</div>
+                <button onclick="addToCart(${product.id})">🛒 В корзину</button>
+            </div>
+        `).join("");
+    }
+
+    // Запуск
+    renderCatalog();
+    updateCartCount();
+</script>
+
+</body>
+</html>

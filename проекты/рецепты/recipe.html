@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рецепты - Приготовление</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Рецепты</h1>
+        <nav>
+            <a href="index.html">Главная</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="recipe-container">
+            <div id="recipe-content">
+                <!-- Содержание загружается через JS -->
+            </div>
+            <button id="back-btn" class="back-button">← Назад к рецептам</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>2026 Простые рецепты</p>
+    </footer>
+
+    <script>
+        const recipes = {
+            1: {
+                name: "Паста Карбонара",
+                ingredients: [
+                    "Спагетти - 200г",
+                    "Бекон - 100г",
+                    "Яичные желтки - 2 шт",
+                    "Пармезан - 50г",
+                    "Черный перец"
+                ],
+                steps: [
+                    "Отварите спагетти.",
+                    "Обжарьте бекон до хруста.",
+                    "Смешайте желтки с тертым пармезаном.",
+                    "Соедините горячие спагетти с беконом.",
+                    "Добавьте яичную смесь, перемешайте."
+                ]
+            },
+            2: {
+                name: "Греческий салат",
+                ingredients: [
+                    "Огурцы - 2 шт",
+                    "Помидоры - 2 шт",
+                    "Фета - 150г",
+                    "Маслины - 100г",
+                    "Лук красный - 1 шт"
+                ],
+                steps: [
+                    "Нарежьте овощи крупными кусками.",
+                    "Добавьте маслины и кубики феты.",
+                    "Посолите, поперчите.",
+                    "Заправьте оливковым маслом."
+                ]
+            },
+            3: {
+                name: "Шоколадное печенье",
+                ingredients: [
+                    "Мука - 200г",
+                    "Какао - 50г",
+                    "Масло слив. - 100г",
+                    "Сахар - 100г",
+                    "Яйцо - 1 шт"
+                ],
+                steps: [
+                    "Разогрейте духовку до 180°C.",
+                    "Смешайте масло с сахаром, добавьте яйцо.",
+                    "Всыпьте муку, какао, замесите тесто.",
+                    "Сформируйте шарики, выложите на противень.",
+                    "Выпекайте 15 минут."
+                ]
+            }
+        };
+
+        function getRecipeId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        function displayRecipe() {
+            const id = getRecipeId();
+            const recipe = recipes[id];
+            const container = document.getElementById('recipe-content');
+
+            if (!recipe) {
+                container.innerHTML = '<p>Рецепт не найден.</p>';
+                return;
+            }
+
+            let ingredientsList = '<ul>';
+            recipe.ingredients.forEach(item => {
+                ingredientsList += `<li>${item}</li>`;
+            });
+            ingredientsList += '</ul>';
+
+            let stepsList = '<ol>';
+            recipe.steps.forEach(step => {
+                stepsList += `<li>${step}</li>`;
+            });
+            stepsList += '</ol>';
+
+            container.innerHTML = `
+                <h2>${recipe.name}</h2>
+                <div class="ingredients">
+                    <h3>Ингредиенты:</h3>
+                    ${ingredientsList}
+                </div>
+                <div class="steps">
+                    <h3>Приготовление:</h3>
+                    ${stepsList}
+                </div>
+            `;
+        }
+
+        document.getElementById('back-btn').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        displayRecipe();
+    </script>
+</body>
+</html>

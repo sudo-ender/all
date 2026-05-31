@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Clothes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Clothes<span>Shop</span></div>
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="cart.html">Корзина (<span id="cart-count">0</span>)</a>
+    </nav>
+</header>
+
+<main>
+    <h2 style="text-align: center; margin-bottom: 25px;">Моя корзина</h2>
+    <div class="cart-container" id="cart-container"></div>
+</main>
+
+<script>
+    function getCart() {
+        const cart = localStorage.getItem("clothesCart");
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem("clothesCart", JSON.stringify(cart));
+        updateCartCount();
+        renderCart();
+    }
+
+    function updateCartCount() {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const countSpan = document.getElementById("cart-count");
+        if (countSpan) countSpan.innerText = totalItems;
+    }
+
+    function removeFromCart(productId) {
+        let cart = getCart();
+        cart = cart.filter(item => item.id !== productId);
+        saveCart(cart);
+    }
+
+    function changeQuantity(productId, delta) {
+        let cart = getCart();
+        const item = cart.find(i => i.id === productId);
+        if (item) {
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            saveCart(cart);
+        }
+    }
+
+    function renderCart() {
+        const cart = getCart();
+        const container = document.getElementById("cart-container");
+        
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div class="empty-cart">
+                    Корзина пуста<br><br>
+                    <a href="index.html" class="back-btn">Перейти к покупкам</a>
+                </div>
+            `;
+            return;
+        }
+        
+        let total = 0;
+        let itemsHtml = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            return `
+                <div class="cart-item">
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        ${item.price} ₽ × ${item.quantity} = ${itemTotal} ₽
+                    </div>
+                    <div>
+                        <button onclick="changeQuantity(${item.id}, -1)">-</button>
+                        <span style="margin: 0 10px;">${item.quantity}</span>
+                        <button onclick="changeQuantity(${item.id}, 1)">+</button>
+                        <button onclick="removeFromCart(${item.id})" style="margin-left: 10px;">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+        
+        container.innerHTML = `
+            ${itemsHtml}
+            <div class="total">Итого: ${total} ₽</div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="index.html" class="back-btn">← Продолжить покупки</a>
+                <button onclick="checkout()" style="width: auto; margin-left: 15px; background: #27ae60;">💳 Оформить заказ</button>
+            </div>
+        `;
+    }
+    
+    function checkout() {
+        if (getCart().length > 0) {
+            alert("Спасибо за заказ! Мы свяжемся с вами.");
+            localStorage.removeItem("clothesCart");
+            renderCart();
+            updateCartCount();
+        } else {
+            alert("Корзина пуста");
+        }
+    }
+    
+    renderCart();
+    updateCartCount();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel | Мои бронирования</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <span class="logo-icon">🏣</span> Hotel
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="booking.html" class="nav-link active">Бронирования</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="booking-hero">
+        <div class="container">
+            <h1>Забронируйте номер</h1>
+            <p>Заполните простую форму - и мы подтвердим ваше бронирование</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="booking-card">
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label>Ваше имя</label>
+                    <input type="text" id="guestName" placeholder="Петров Алексей Иванович" required>
+                </div>
+                <div class="form-group">
+                    <label>Отель</label>
+                    <select id="hotelSelect">
+                        <option value="Grand Plaza">Grand Plaza</option>
+                        <option value="Sea Breeze Resort">Sea Breeze Resort</option>
+                        <option value="Mountain View">Mountain View</option>
+                        <option value="City Central">City Central</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Дата заезда</label>
+                    <input type="date" id="checkin" required>
+                </div>
+                <div class="form-group">
+                    <label>Дата выезда</label>
+                    <input type="date" id="checkout" required>
+                </div>
+                <button type="submit" class="btn btn-book">Забронировать</button>
+                <div id="formMessage" class="message-area" style="display: none;"></div>
+            </form>
+        </div>
+
+        <!-- Список активных бронирований -->
+        <div class="booking-list">
+            <h3>Ваши активные брони</h3>
+            <div id="bookingsContainer">
+                <!-- динамический список броней -->
+                <div class="empty-message">У вас пока нет бронирований. Создайте новое!</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>2026 Hotel — бронирование отелей.</p>
+        </div>
+    </footer>
+
+    <script>
+        let bookings = [];
+
+        function loadBookingsFromStorage() {
+            const stored = localStorage.getItem('hotel_bookings');
+            if(stored) {
+                try {
+                    bookings = JSON.parse(stored);
+                } catch(e) { bookings = []; }
+            } else {
+                bookings = [];
+            }
+        }
+
+        function saveBookingsToStorage() {
+            localStorage.setItem('hotel_bookings', JSON.stringify(bookings));
+        }
+
+        // Отображение списка броней на странице
+        function renderBookingsList() {
+            const container = document.getElementById('bookingsContainer');
+            if(!container) return;
+
+            if(bookings.length === 0) {
+                container.innerHTML = '<div class="empty-message">Пока ни одной брони. Заполните форму выше </div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            bookings.forEach((booking, idx) => {
+                const bookingDiv = document.createElement('div');
+                bookingDiv.className = 'booking-item';
+                bookingDiv.innerHTML = `
+                    <div>
+                        <div class="booking-name">${escapeHtml(booking.guestName)}</div>
+                        <div class="booking-dates"> ${escapeHtml(booking.hotel)} • ${booking.checkin} → ${booking.checkout}</div>
+                    </div>
+                    <button class="delete-booking" data-idx="${idx}" title="Отменить бронь">✖</button>
+                `;
+                container.appendChild(bookingDiv);
+            });
+
+            // Вешаем обработчики на кнопки удаления
+            document.querySelectorAll('.delete-booking').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = btn.getAttribute('data-idx');
+                    if(idx !== null) {
+                        deleteBooking(parseInt(idx));
+                    }
+                });
+            });
+        }
+
+        // Функция для безопасного вывода текста
+        function escapeHtml(str) {
+            if(!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+
+        // Добавление новой брони
+        function addBooking(guestName, hotel, checkin, checkout) {
+            // простая валидация дат
+            const today = new Date().toISOString().slice(0,10);
+            if(checkin < today) {
+                return { success: false, message: 'Дата заезда не может быть раньше сегодняшнего дня' };
+            }
+            if(checkout <= checkin) {
+                return { success: false, message: 'Дата выезда должна быть позже даты заезда' };
+            }
+            if(!guestName.trim()) {
+                return { success: false, message: 'Введите имя гостя' };
+            }
+
+            const newBooking = {
+                id: Date.now(),
+                guestName: guestName.trim(),
+                hotel: hotel,
+                checkin: checkin,
+                checkout: checkout,
+                createdAt: new Date().toISOString()
+            };
+            bookings.push(newBooking);
+            saveBookingsToStorage();
+            renderBookingsList();
+            return { success: true, message: `Бронирование для ${guestName} подтверждено!` };
+        }
+
+        function deleteBooking(index) {
+            if(index >= 0 && index < bookings.length) {
+                const removed = bookings[index];
+                bookings.splice(index, 1);
+                saveBookingsToStorage();
+                renderBookingsList();
+                showTemporaryMessage(`Бронь отменена: ${removed.guestName} — ${removed.hotel}`, true);
+            }
+        }
+
+        function showTemporaryMessage(msg, isError = false) {
+            const msgDiv = document.getElementById('formMessage');
+            if(msgDiv) {
+                msgDiv.textContent = msg;
+                msgDiv.style.display = 'block';
+                msgDiv.style.backgroundColor = isError ? '#ffe6e5' : '#e0f2e9';
+                msgDiv.style.color = isError ? '#b13e3a' : '#16634c';
+                setTimeout(() => {
+                    msgDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Обработка отправки формы
+        const form = document.getElementById('bookingForm');
+        if(form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const guestName = document.getElementById('guestName').value;
+                const hotel = document.getElementById('hotelSelect').value;
+                const checkin = document.getElementById('checkin').value;
+                const checkout = document.getElementById('checkout').value;
+
+                if(!guestName || !checkin || !checkout) {
+                    showTemporaryMessage('Пожалуйста, заполните все поля (имя, даты)', true);
+                    return;
+                }
+
+                const result = addBooking(guestName, hotel, checkin, checkout);
+                if(result.success) {
+                    // Очищаем имя, но даты и отель можно оставить для удобства (легкость)
+                    document.getElementById('guestName').value = '';
+                    // (даты тоже можно очистить, но пусть остаются)
+                    document.getElementById('checkin').value = '';
+                    document.getElementById('checkout').value = '';
+                    showTemporaryMessage(result.message, false);
+                } else {
+                    showTemporaryMessage(result.message, true);
+                }
+            });
+        }
+
+        // Инициализация страницы: загружаем из хранилища и рендерим список
+        loadBookingsFromStorage();
+        renderBookingsList();
+
+        // Установка минимальных дат для календарей (легкая функция UX)
+        const todayDate = new Date().toISOString().split('T')[0];
+        const checkinInput = document.getElementById('checkin');
+        const checkoutInput = document.getElementById('checkout');
+        if(checkinInput) checkinInput.min = todayDate;
+        if(checkoutInput) checkoutInput.min = todayDate;
+
+        // Синхронное обновление минимальной даты выезда при смене заезда
+        if(checkinInput && checkoutInput) {
+            checkinInput.addEventListener('change', function() {
+                const selectedCheckin = this.value;
+                if(selectedCheckin) {
+                    checkoutInput.min = selectedCheckin;
+                    if(checkoutInput.value && checkoutInput.value <= selectedCheckin) {
+                        checkoutInput.value = '';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background-color: #f8f9fc;
+    color: #1e2a3e;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* HEADER */
+.header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(2px);
+    background: rgba(255,255,255,0.96);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #2c3e66, #1a4b8c);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    background: none;
+    color: #2c3e66;
+}
+
+.nav {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-weight: 500;
+    color: #2c3e66;
+    transition: 0.2s;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover, .nav-link.active {
+    border-bottom-color: #1a4b8c;
+    color: #0f2b44;
+}
+
+/* ГЕРО БЛОК */
+.hero {
+    background: linear-gradient(120deg, #eef2f9 0%, #e2e8f0 100%);
+    padding: 70px 0;
+    text-align: center;
+    border-bottom: 1px solid #cddfe7;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #0a2942;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 28px auto;
+    color: #2c445e;
+}
+
+.btn {
+    display: inline-block;
+    background: #1f6392;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.btn-primary {
+    background: #1f6392;
+}
+
+.btn-primary:hover {
+    background: #0e4b72;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* СЕКЦИЯ ОТЕЛЕЙ */
+.hotels-section {
+    padding: 60px 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 600;
+    color: #1f3b4c;
+}
+
+.hotel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 28px;
+}
+
+.hotel-card {
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+    transition: 0.25s ease;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.hotel-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 25px -12px rgba(0,0,0,0.15);
+}
+
+.hotel-image {
+    font-size: 4rem;
+    background: #eef3fa;
+    padding: 30px 0;
+}
+
+.hotel-info {
+    padding: 16px 12px 20px;
+}
+
+.hotel-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+}
+
+.hotel-rating {
+    color: #f5b042;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.hotel-price {
+    font-weight: 700;
+    color: #1a6e4b;
+    margin-bottom: 18px;
+    font-size: 1rem;
+}
+
+.btn-small {
+    display: inline-block;
+    background: #e9eff5;
+    color: #1f6392;
+    padding: 8px 18px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-small:hover {
+    background: #1f6392;
+    color: white;
+}
+
+/* ПРЕИМУЩЕСТВА */
+.features {
+    background: #ffffff;
+    padding: 50px 0;
+    border-top: 1px solid #e2edf2;
+    border-bottom: 1px solid #e2edf2;
+}
+
+.features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    text-align: center;
+}
+
+.feature-item {
+    flex: 1;
+    min-width: 180px;
+    background: #f9fbfe;
+    padding: 28px 12px;
+    border-radius: 32px;
+    transition: 0.2s;
+}
+
+.feature-icon {
+    font-size: 2.6rem;
+    margin-bottom: 12px;
+}
+
+.feature-item h3 {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.feature-item p {
+    color: #546e7a;
+    font-size: 0.9rem;
+}
+
+/* ФУТЕР */
+.footer {
+    background: #eef2f7;
+    text-align: center;
+    padding: 28px 0;
+    color: #2a4b6e;
+    font-size: 0.85rem;
+    margin-top: 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 680px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    .header-container {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .nav {
+        gap: 32px;
+    }
+    .section-title {
+        font-size: 1.6rem;
+    }
+}
+
+/* Стили для страницы бронирования (booking) */
+.booking-hero {
+    background: #ecf3f8;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.booking-card {
+    max-width: 650px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 36px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1f4662;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #cfdfea;
+    border-radius: 28px;
+    font-size: 1rem;
+    transition: 0.2s;
+    background: white;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #1f6392;
+    box-shadow: 0 0 0 3px rgba(31,99,146,0.2);
+}
+
+.btn-book {
+    background: #2a7f6e;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    margin-top: 12px;
+}
+
+.btn-book:hover {
+    background: #1e5f52;
+}
+
+.message-area {
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 60px;
+    text-align: center;
+    font-weight: 500;
+    background: #eaf6f0;
+    color: #16634c;
+    transition: 0.2s;
+}
+
+/* дополнительная карточка бронирования: список ближайших броней */
+.booking-list {
+    background: #fafcfd;
+    border-radius: 28px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.booking-item {
+    background: white;
+    border-left: 5px solid #2a7f6e;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.booking-name {
+    font-weight: 700;
+}
+
+.booking-dates {
+    color: #5f7f9a;
+    font-size: 0.85rem;
+}
+
+.delete-booking {
+    background: none;
+    border: none;
+    color: #b9524e;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.7;
+    transition: 0.1s;
+}
+
+.delete-booking:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.empty-message {
+    text-align: center;
+    color: #6f8eaa;
+    padding: 20px;
+}

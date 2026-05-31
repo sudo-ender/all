@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рецепты - Главная</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Рецепты</h1>
+        <nav>
+            <a href="index.html" class="active">Главная</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="catalog">
+            <div class="card" data-id="1">
+                <h3>Паста Карбонара</h3>
+                <p>Классическая итальянская паста с беконом и сыром.</p>
+                <button class="show-recipe">Смотреть рецепт</button>
+            </div>
+            <div class="card" data-id="2">
+                <h3> Греческий салат</h3>
+                <p>Свежие овощи и другое.</p>
+                <button class="show-recipe">Смотреть рецепт</button>
+            </div>
+            <div class="card" data-id="3">
+                <h3>Шоколадное печенье</h3>
+                <p>Хрустящее снаружи, мягкое внутри.</p>
+                <button class="show-recipe">Смотреть рецепт</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>2026 Простые рецепты</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.show-recipe').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.card');
+                const id = card.dataset.id;
+                window.location.href = `recipe.html?id=${id}`;
+            });
+        });
+    </script>
+</body>
+</html>
